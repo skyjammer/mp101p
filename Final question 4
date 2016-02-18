@@ -1,0 +1,49 @@
+Enhancing the Blog to support viewers liking certain comments
+In this problem, you will be enhancing the blog project to support users liking certain comments and the like counts showing up the in the permalink page. 
+
+After downloading and extracting the final4.zip
+
+Solution:
+
+1. $ mongoimport -d blog -c posts < posts.json --batchSize 1
+   results should be:
+    2016-02-18T09:24:45.895+0400	connected to: localhost
+    2016-02-18T09:24:46.730+0400	imported 1000 documents
+
+2. Open blogPostDAO.py
+   -at the bottom youl will see 
+    XXX Final exam 
+   
+   add the following:
+   post = self.posts.find_one({'permalink': permalink})
+
+    comment = post['comments'][comment_ordinal]
+      if 'num_likes' not in comment:
+          comment['num_likes'] = 0
+      comment['num_likes'] = int(comment['num_likes']) + 1
+      post['comments'][comment_ordinal] = comment
+    self.posts.save(post)
+
+3. Save then run
+   $ python blogPostDAO.py
+   $ python blog.py
+
+4. Open new terminal
+   $ python validate.py
+   
+   Result should look like this:
+
+   Welcome to the M101 Final Exam, Question 4 Validation Checker
+  Trying to grab the blog home page at url and find the first post. http://localhost:8082/
+  Found a post url:  /post/mxwnnnqaflufnqwlekfd
+  Trying to grab the number of likes for url  http://localhost:8082/post/mxwnnnqaflufnqwlekfd
+  Likes value  2
+  Clicking on Like link for post:  /post/mxwnnnqaflufnqwlekfd
+  Trying to grab the number of likes for url  http://localhost:8082/post/mxwnnnqaflufnqwlekfd
+  Likes value  3
+  Tests Passed for Final 4. Your validation code is 3f837hhg673ghd93hgf8
+
+   
+
+
+
